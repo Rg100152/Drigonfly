@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 2: पहला शिकार | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit1.html" class="back-link">← पिछला अध्याय (Unit 1)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 2</span>
+    <h1 class="main-title">पानी के नीचे का पहला शिकार और जीवन रक्षा</h1>
+
+    <div class="story-content">
+      <p>एरोन अब नील सरोवर की अंधेरी और रहस्यमयी तलहटी में आ चुका था। उसका शरीर भले ही बहुत छोटा था, लेकिन उसकी भूख और अस्तित्व की जंग शुरू हो चुकी थी। जन्म लेने के बाद से ही उसे अपनी पहली असली चुनौती का सामना करना था—<strong>खुद के लिए भोजन तलाशना और अपनी जान बचाना।</strong></p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>अंधेरे संसार की पहली चुनौती</h3>
+
+      <p>झील के इस निचले हिस्से में सूरज की रोशनी बमुश्किल पहुँच पाती थी। यहाँ चारों ओर सड़े हुए पत्तों की महक, कीचड़ की परत और पानी के भारी दबाव का अहसास होता था। एरोन एक सड़े हुए जलीय पौधे की जड़ के पास सहमा हुआ बैठा था। उसके पास न तो तेज दौड़ने के लिए पैर थे और न ही पक्षियों की तरह उड़ने के पंख।</p>
+
+      <p>वह केवल एक छोटा सा 'निंफ' था, जिसका शरीर मिट्टी के रंग से मिलता-जुलता था, ताकि वह दुश्मनों की नजरों से बच सके।</p>
+
+      <p>लेकिन पेट की आग किसी को नहीं बख्शती। कुछ ही घंटों में एरोन को तीव्र कमजोरी महसूस होने लगी। उसे जीवित रहने के लिए खाना चाहिए था, और इस पानी के नीचे भोजन का मतलब था—<strong>या तो शिकार करो, या फिर खुद शिकार बन जाओ।</strong></p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>प्रकृति का अद्भुत हथियार: 'मास्क'</h3>
+
+      <p>कुदरत ने ड्रैगनफ्लाई के निंफ को एक ऐसा अनोखा और घातक हथियार दिया था, जो किसी साइंस-फिक्शन फिल्म के एलियन से कम नहीं होता।</p>
+
+      <p>एरोन के मुँह के नीचे उसका निचला जबड़ा (Labium) एक विशेष स्प्रिंग की तरह मुड़ा हुआ रहता था, जिसे <strong>'मास्क'</strong> कहा जाता है। सामान्य स्थिति में यह उसके चेहरे पर ढका रहता है, जिससे किसी को अंदाजा भी नहीं होता कि यह कितना खतरनाक हो सकता है।</p>
+
+      <p>एरोन ने अपनी बड़ी, स्थिर आँखों से पानी में हलचल को भापना शुरू किया।</p>
+
+      <p>तभी, उसकी नजर पानी में तैरते हुए सूक्ष्म जीवों के एक झुंड पर पड़ी—जिन्हें <strong>'डैफ्निया' (Daphnia)</strong> या जल-पिच्छिका कहा जाता है। वे बहुत तेजी से पानी में तैर रहे थे।</p>
+
+      <p>एरोन ने धीरे-धीरे, बिना कोई आवाज किए, अपनी छह टांगों से कीचड़ पर रेंगना शुरू किया। वह अपने शिकार के बिल्कुल करीब पहुँच गया।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>पहला सफल हमला</h3>
+
+      <p>शिकार ठीक उसकी पहुँच के भीतर था।</p>
+
+      <p>एक सेकंड का भी सौवाँ हिस्सा बर्बाद किए बिना, एरोन ने अपने उस छिपे हुए जबड़े यानी 'मास्क' को एक स्प्रिंग की तरह सुपरसोनिक गति से बाहर फेंका!</p>
+
+      <p class="action-text">"झपट्ट!"</p>
+
+      <p>पानी में एक सूक्ष्म हलचल हुई। एरोन का मास्क बिजली की तेजी से आगे बढ़ा, उसने एक डैफ्निया को अपने नुकीले कांटों से जकड़ लिया, और उससे भी तेज गति से उसे खींचकर अपने मुँह के भीतर ले आया।</p>
+
+      <p>यह हमला इतना अचूक और तेज था कि शिकार को संभलने का मौका तक नहीं मिला।</p>
+
+      <p>एरोन ने पहली बार अपने जीवन में खुद शिकार किया था। उस सूक्ष्म भोजन से उसे एक नई ऊर्जा का अहसास हुआ। उसके भीतर जीवन की गर्मी दौड़ गई। उसने समझ लिया कि इस पाताल लोक में जिंदा रहने के लिए उसे अपनी इस अद्भुत प्राकृतिक खूबी का इस्तेमाल करना होगा।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>एक भयानक खतरा: पानी की परछाई</h3>
+
+      <p>लेकिन एरोन की यह खुशी ज्यादा देर टिक नहीं पाई।</p>
+
+      <p>तभी पानी के ऊपरी हिस्से में एक विशाल छाया लहराई। वह नील सरोवर की एक बड़ी <strong>'स्ट्राइप्स वाली पर्च मछली' (Stripe Perch)</strong> थी। इस मछली की नजरें कीचड़ में हलचल करने वाले हर छोटे जीव पर टिकी रहती थीं।</p>
+
+      <p>मछली ने एरोन की हल्की सी हरकत को भाप लिया था। वह अपनी मजबूत पंखों (Fins) को हिलाती हुई सीधे एरोन की तरफ झपटी। उसका बड़ा मुँह खुला हुआ था, जो एरोन जैसे दर्जनों निंफ को एक बार में निगल सकता था।</p>
+
+      <p>एरोन का दिल तेजी से धड़कने लगा। भागने के लिए उसके पास पैर बहुत छोटे थे।</p>
+
+      <p>लेकिन संकट के समय प्रकृति ने उसे एक और अनोखी तकनीक दी थी—<strong>'जेट प्रोपल्शन' (Jet Propulsion)</strong>।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>मौत के मुँह से बच निकलना</h3>
+
+      <p>इससे पहले कि मछली उस पर झपट्टा मारती, एरोन ने अपने पेट (Rectum) के पिछले हिस्से में पानी भरा और एक झटके से उस पानी को पूरी ताकत से पीछे की ओर धकेल दिया।</p>
+
+      <p class="action-text">"शूँऽऽ!"</p>
+
+      <p>पानी के दबाव के उस झटके से एरोन किसी पानी के भीतर की मिसाइल की तरह सीधे पीछे की ओर उछला और पानी की जेट रफ्तार के साथ एक घने जलीय पौधे (Hydrilla) के भारी झुरमुट के अंदर जा घुसा।</p>
+
+      <p>मछली का मुँह खाली रह गया। वह कीचड़ में अपना सिर मारकर रह गई और झुंझलाते हुए दूसरे हिस्से की तरफ तैर गई।</p>
+
+      <p>पौधों के घने जंगल में छिपे एरोन ने राहत की सांस ली। उसका छोटा सा दिल अभी भी तेजी से धड़क रहा था। इस पहली खतरनाक घटना ने उसे सिखा दिया था कि यह दुनिया जितनी रोमांचक है, उतनी ही बेरहम भी है।</p>
+
+      <p>एरोन ने अपनी पहली परीक्षा पास कर ली थी। वह पानी के नीचे के इस विशाल संसार में अब और अधिक सतर्क, चतुर और ताकतवर बनने के लिए तैयार हो रहा था।</p>
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>एरोन का संघर्ष अभी शुरू हुआ है...</p>
+      <a href="unit3.html" class="next-btn">Unit 3 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

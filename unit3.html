@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 3: मोल्टिंग का सफर | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit2.html" class="back-link">← पिछला अध्याय (Unit 2)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 3</span>
+    <h1 class="main-title">मोल्टिंग का सफर और शरीर का पहला बड़ा बदलाव</h1>
+
+    <div class="story-content">
+      <p>नील सरोवर की तलहटी में दिन और रात का चक्र धीरे-धीरे बदल रहा था। पहले बड़े हमले से बच निकलने के बाद, एरोन और भी अधिक सतर्क और समझदार हो गया था। अब वह खुले कीचड़ में बेवजह नहीं घूमता था। वह जलीय पौधों की जड़ों, गिरे हुए पत्तों और पत्थरों की ओट में छिपकर ही शिकार करता था।</p>
+
+      <p>जैसे-जैसे दिन बीते, एरोन ने लगातार शिकार किया। उसने पानी के छोटे-छोटे कीड़ों और मच्छरों के लार्वा को अपने अचूक 'मास्क' से पकड़-पकड़ कर खाया। लगातार भोजन मिलने से उसका शरीर भीतर से तेजी से बढ़ रहा था।</p>
+
+      <p>लेकिन इसी के साथ एक नई और भयानक समस्या खड़ी होने लगी।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>तंग कवच और घुटन का अहसास</h3>
+
+      <p>कीटों का बाहरी शरीर हमारी तरह हड्डियों से नहीं बना होता। उनका एक बाहरी सख्त ढांचा (Exoskeleton) होता है, जो एक कवच की तरह काम करता है। यह कवच शरीर को सुरक्षा तो देता है, लेकिन यह कभी बढ़ता नहीं है।</p>
+
+      <p>एरोन का शरीर अंदर से बड़ा हो रहा था, लेकिन उसका बाहरी भूरा कवच उतना ही छोटा रहा।</p>
+
+      <p>धीरे-धीरे एरोन को घुटन महसूस होने लगी। उसे ऐसा लगा मानो उसे किसी लोहे के तंग बक्से में बंद कर दिया गया हो। उसकी टांगों की हरकतें धीमी पड़ने लगीं और सांस लेने में तकलीफ होने लगी। अब वह न तो शिकार कर पा रहा था और न ही तेजी से तैर पा रहा था।</p>
+
+      <p>अगर वह इस तंग कवच से बाहर नहीं निकलता, तो उसका शरीर अंदर ही घुटकर खत्म हो जाता।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>निर्णायक घड़ी: पहली मोल्टिंग (Moulting)</h3>
+
+      <p>प्रकृति ने एरोन को इस संकट से निकलने का रास्ता दिखाया—<strong>'मोल्टिंग' यानी त्वचा बदलना (कांचली उतारना)।</strong></p>
+
+      <p>एरोन ने एक बड़े पत्थर के निचले हिस्से में सुरक्षित जगह खोजी। उसने अपनी छह टांगों के पंजों को पत्थर की खुरदरी सतह में मजबूती से गाड़ दिया। वह पूरी तरह स्थिर हो गया।</p>
+
+      <p>अब उसने अपने शरीर के भीतर हवा और पानी का दबाव बनाना शुरू किया। उसके धड़ के भीतर की मांसपेशियां खिंचने लगीं। दर्द और तनाव इतना बढ़ गया कि एरोन का पूरा शरीर कांपने लगा।</p>
+
+      <p class="action-text">"चटक!"</p>
+
+      <p>उसके सिर के ठीक पीछे, पीठ के ऊपरी हिस्से के सख्त कवच में एक बारीक दरार पड़ी।</p>
+
+      <p>एरोन ने अपनी पूरी ताकत लगाई। उस दरार में से सबसे पहले उसका नया, बेहद नरम और पारदर्शी सिर बाहर निकला। इसके बाद उसकी बड़ी-बड़ी आँखें और फिर उसकी छह टांगें बाहर आईं।</p>
+
+      <p>यह बेहद दर्दनाक और थका देने वाली प्रक्रिया थी। एरोन लगभग आधा उल्टा लटक गया था। अंत में, एक झटके के साथ उसने अपनी लंबी पूंछ को भी उस पुरानी सूखी केचुली (Exuvia) से बाहर खींच लिया।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>अत्यंत कमजोरी का समय</h3>
+
+      <p>पुरानी त्वचा से बाहर आने के बाद, एरोन पत्थर के पास कीचड़ में गिर पड़ा।</p>
+
+      <p>यह उसके जीवन का सबसे नाजुक और खतरनाक समय था। उसका नया शरीर बिल्कुल मोम की तरह नरम था। उसका नया कवच अभी तक सख्त नहीं हुआ था। इस समय अगर कोई छोटा सा जल-कीट भी उस पर हमला कर देता, तो वह खुद का बचाव नहीं कर पाता। यहाँ तक कि पानी का हल्का सा तेज बहाव भी उसके नरम शरीर को नुकसान पहुंचा सकता था।</p>
+
+      <p>एरोन ने खुद को पूरी तरह से पत्थर के नीचे छिपा लिया। वह बिना हिले-डुले सांसें गिनता रहा।</p>
+
+      <p>धीरे-धीरे, पानी में मौजूद खनिजों और उसके आंतरिक रसायनों के प्रभाव से उसका नया कवच सूखने और सख्त होने लगा।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>एक नया, मजबूत और घातक रूप</h3>
+
+      <p>लगभग 4 से 5 घंटे बाद, एरोन का नया कवच पूरी तरह से सख्त और मजबूत हो चुका था।</p>
+
+      <p>जब वह पत्थर के नीचे से बाहर निकला, तो वह पहले से काफी अलग और बड़ा दिख रहा था।</p>
+
+      <ul>
+        <li>उसका आकार पहले से लगभग दोगुना हो चुका था।</li>
+        <li>उसकी आँखें अब अधिक स्पष्ट और तेज थीं।</li>
+        <li>उसका नया 'मास्क' अब और भी अधिक लंबा, चौड़ा और धारदार हो गया था।</li>
+        <li>उसकी पीठ पर दो बहुत छोटे-छोटे उभार (Wing Pads) आ गए थे—ये उसके भविष्य के पंखों के शुरुआती निशान थे!</li>
+      </ul>
+
+      <p>एरोन ने अपने नए मजबूत शरीर में एक नई ऊर्जा और ताकत महसूस की। उसने अपनी पुरानी खाली पड़ी केचुली की तरफ देखा, जो अभी भी पत्थर पर चिपकी हुई थी। वह उसके पुराने अतीत का एक खोखला ढांचा भर रह गई थी।</p>
+
+      <p>एरोन ने अपनी छह टांगों को फैलाया और पानी में एक नई शान के साथ आगे बढ़ा। उसने जीवन के इस पहले बड़े शारीरिक बदलाव को सफलता पूर्वक पार कर लिया था। वह अब नील सरोवर की गहराई का एक अधिक परिपक्व और खतरनाक शिकारी बन चुका था।</p>
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>अब एरोन के शरीर में एक नई ताकत है...</p>
+      <a href="unit4.html" class="next-btn">Unit 4 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 6: हवा पर विजय | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .story-content em {
+      color: #fff;
+      font-style: italic;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* Special Highlight for the climax/flying ability */
+    .highlight-box {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.1) 50%, rgba(212, 175, 55, 0.05) 100%);
+      border-left: 3px solid var(--gold);
+      padding: 2rem;
+      border-radius: 0 10px 10px 0;
+      margin: 2.5rem 0;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05);
+    }
+
+    .highlight-box p {
+      margin-bottom: 0 !important;
+      color: #fff !important;
+      font-size: 1.25rem !important;
+      line-height: 2 !important;
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+      .highlight-box {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit5.html" class="back-link">← पिछला अध्याय (Unit 5)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 6</span>
+    <h1 class="main-title">पहली उड़ान और हवा पर विजय</h1>
+
+    <div class="story-content">
+      <p>सरकंडे के तने पर धूप सेकते हुए एरोन का नया शरीर अब पूरी तरह तैयार हो चुका था। उसके धातुई नीले और हरे रंग का शरीर सूरज की रोशनी में जगमगा रहा था। उसके चारों पारदर्शी पंख फौलाद की तरह मजबूत और कांच की तरह साफ हो चुके थे।</p>
+
+      <p>उसके भीतर एक नया, अदम्य आवेग उमड़ रहा था। अब तक उसने केवल पानी के नीचे रेंगना और तैरना सीखा था, लेकिन अब असली दुनिया उसका इंतजार कर रही थी—<strong>आसमान की असीम दुनिया!</strong></p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>हवा में पहली छलांग</h3>
+
+      <p>एरोन ने अपनी छह टांगों को सरकंडे के तने से थोड़ा ढीला किया। उसने अपने चारों पंखों को एक साथ, बेहद करीने से फड़फड़ाना शुरू किया।</p>
+
+      <p class="action-text">"ज़ज़ज़... खड़-खड़..."</p>
+
+      <p>एक हल्की सी तेज गूंज के साथ, एरोन ने तने से अपनी पकड़ छोड़ दी और हवा में छलांग लगा दी।</p>
+
+      <p>शुरुआत में उसका शरीर थोड़ा सा नीचे की ओर झुका, जैसे कोई विमान रनवे से उठने के बाद लड़खड़ाता है। लेकिन अगले ही पल, उसके चारों पंखों ने अलग-अलग दिशाओं में स्वतंत्र रूप से काम करना शुरू कर दिया।</p>
+
+      <p>अद्भुत! यह अनुभव किसी चमत्कार से कम नहीं था। एरोन हवा में तैर रहा था। वह जमीन या पानी के बंधन से पूरी तरह मुक्त हो चुका था।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>आसमान के नियमों का बादशाह</h3>
+
+      <p>हवा में कुछ ही सेकंड बिताने के बाद, एरोन को महसूस हुआ कि उसकी उड़ान की क्षमता सामान्य कीटों या मक्खियों जैसी साधारण नहीं है। प्रकृति ने उसे दुनिया का सबसे बेहतरीन और कुशल हवाई पायलट बनाया था:</p>
+
+      <ul>
+        <li><strong>स्थिर मंडराना (Hovering):</strong> एरोन बिना आगे बढ़े, एक ही जगह पर हवा में पूरी तरह स्थिर (हेलीकॉप्टर की तरह) रुक सकता था।</li>
+        <li><strong>चतुर्दिक गति (Multi-directional Flight):</strong> वह बिना मोड़े सीधे आगे, पीछे, दाएं, बाएं और यहाँ तक कि <strong>उल्टी दिशा में (Reverse)</strong> भी पलक झपकते ही उड़ सकता था।</li>
+        <li><strong>अविश्वसनीय रफ्तार:</strong> अपनी पूरी ताकत लगाने पर वह <strong>50 से 60 किलोमीटर प्रति घंटे</strong> की रफ्तार पकड़ सकता था, जो उस नन्हे शरीर के लिए किसी सुपरकार जैसी गति थी।</li>
+      </ul>
+
+      <p>यह सब इसलिए संभव था क्योंकि उसके चारों पंख आगे और पीछे के जोड़ों में अलग-अलग मांसपेशियों से नियंत्रित होते थे।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>360-डिग्री की जादुई दृष्टि</h3>
+
+      <p>उड़ते हुए एरोन ने महसूस किया कि उसकी दुनिया अब पूरी तरह बदल चुकी है। उसके सिर का 80 प्रतिशत हिस्सा उसकी दो विशाल आँखों से ढका हुआ था। इन आँखों में लगभग <strong>30,000 छोटे-छोटे लेंस (Ommatidia)</strong> थे।</p>
+
+      <p>इस पैनी दृष्टि के कारण उसे किसी भी दिशा में देखने के लिए अपनी गर्दन मोड़ने की जरूरत नहीं पड़ती थी:</p>
+
+      <ul>
+        <li>उसे अपने सामने, पीछे, ऊपर और नीचे—सब कुछ एक साथ एक ही फ्रेम में साफ-साफ दिखाई दे रहा था।</li>
+        <li>पानी की चमक, सरकंडों की हर हरकत, और हवा में तैरते हुए सूक्ष्म कण उसके लिए क्रिस्टल-क्लियर थे।</li>
+      </ul>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>हवा में पहला हवाई शिकार (Aerial Hunt)</h3>
+
+      <p>उड़ान भरने के कुछ ही मिनटों बाद, एरोन के भीतर की शिकारी प्रवृत्ति फिर से जाग उठी। अब उसका शिकार का दायरा पानी की गंदली तलहटी से बदलकर खुला आसमान बन चुका था।</p>
+
+      <p>उसकी विशाल आँखों ने हवा में उड़ते हुए एक छोटे मच्छर को भांप लिया।</p>
+
+      <p>मच्छर बहुत तेजी से उड़ रहा था, लेकिन एरोन ने उसका पीछा करने के बजाय एक वैज्ञानिक चाल चली—जिसे <strong>'इंटरसेप्शन तकनीक' (Interception Technique)</strong> कहते हैं। उसने यह अनुमान नहीं लगाया कि मच्छर अभी कहाँ है, बल्कि यह गणना की कि <strong>मच्छर अगले एक सेकंड में कहाँ पहुँचेगा</strong>।</p>
+
+      <p class="action-text">"शूँ!"</p>
+
+      <p>एरोन एक जेट फाइटर की तरह मुड़ा। उसने अपनी गति बढ़ाई, हवा में एक कलाबाजी खाई, और अपनी छह टांगों को आगे बढ़ाकर एक छोटी सी टोकरी (Basket) जैसी आकृति बनाई।</p>
+
+      <p>पलक झपकते ही उसने हवा में ही उस मच्छर को दबोच लिया!</p>
+
+      <!-- Highlight Box -->
+      <div class="highlight-box">
+        <p>उसने उड़ान भरते-भरते ही अपने मजबूत जबड़ों से अपना पहला शिकार चबा डाला। वैज्ञानिकों के अनुसार, ड्रैगनफ्लाई की शिकार करने की सफलता दर <strong>95%</strong> होती है—यानी वे शायद ही कभी अपने निशाने से चूकते हैं।</p>
+      </div>
+
+      <p>एरोन अब आसमान का एक निर्विवाद और कुशल सम्राट बन चुका था। हवाएँ उसकी मित्र थीं, और पूरा नील सरोवर उसके नीचे फैला हुआ एक विशाल साम्राज्य था।</p>
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>अब आती है इलाके की जंग...</p>
+      <a href="unit7.html" class="next-btn">Unit 7 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

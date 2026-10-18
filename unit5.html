@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 5: महान रूपांतरण | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .story-content em {
+      color: #fff;
+      font-style: italic;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* Special Highlight for the climax */
+    .climax-highlight {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.1) 50%, rgba(212, 175, 55, 0.05) 100%);
+      border-left: 3px solid var(--gold);
+      padding: 2rem;
+      border-radius: 0 10px 10px 0;
+      margin: 2.5rem 0;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05);
+    }
+
+    .climax-highlight p {
+      margin-bottom: 0 !important;
+      color: #fff !important;
+      font-size: 1.25rem !important;
+      line-height: 2 !important;
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+      .climax-highlight {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit4.html" class="back-link">← पिछला अध्याय (Unit 4)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 5</span>
+    <h1 class="main-title">महान रूपांतरण और पानी से आसमान की ओर</h1>
+
+    <div class="story-content">
+      <p>कई महीने बीत चुके थे। एरोन अब नील सरोवर का सबसे अनुभवी और आकार में सबसे बड़ा निंफ बन चुका था। उसकी पीठ पर मौजूद पंखों के उभार अब पूरी तरह विकसित हो चुके थे। उसके शरीर के भीतर एक अनोखी, गहरी और तीव्र बेचैनी सुगबुगाने लगी थी।</p>
+
+      <p>अब उसे पानी की यह ठंडी, अंधेरी और गंदली दुनिया रास नहीं आ रही थी। उसके भीतर का तंत्र उसे लगातार संकेत दे रहा था कि उसका असली ठिकाना कहीं और है। पानी के नीचे उसे अब सांस लेने में घुटन महसूस होने लगी थी, और उसकी आंतरिक जैविक घड़ी उसे पुकार रही थी—<em>अब पानी को अलविदा कहने का समय आ गया है।</em></p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>सरकंडे की ओर अंतिम यात्रा</h3>
+
+      <p>बसंत की एक सुनहरी और शांत सुबह, जब झील के पानी पर हल्की धुंध छाई हुई थी, एरोन ने तैरना शुरू किया। वह बिना रुके, झील के उथले किनारे पर उगे एक मजबूत और लंबे सरकंडे (Reed/Cattail) के तने के पास पहुँचा।</p>
+
+      <p>उसने अपनी छह मजबूत टांगों से उस तने को कसकर पकड़ लिया और ऊपर की ओर रेंगना शुरू किया।</p>
+
+      <p>एक-एक कदम... और फिर वह क्षण आ गया जब उसका सिर पानी की सतह से पूरी तरह बाहर आ गया।</p>
+
+      <p>उसके जीवन में पहली बार हवा उसके गीले और मटमैले शरीर से सीधी टकराई। वह हवा पानी से बिल्कुल अलग थी—ठंडी, ताज़ा और एक अजीब से रोमांच से भरी हुई। एरोन ने पानी की सतह से लगभग एक फीट ऊपर जाकर खुद को एक मजबूत तने पर पूरी तरह स्थिर कर लिया। उसने अपनी पकड़ इतनी मजबूत कर ली कि वह हवा के किसी भी झोंके से गिर न सके।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>केचुली का फटना (The Great Emergence)</h3>
+
+      <p>तने पर स्थिर होते ही, एरोन के शरीर के भीतर एक भयंकर जैविक उथल-पुथल शुरू हो गई। उसके फेफड़े अब पानी से ऑक्सीजन लेने के बजाय सीधे हवा से सांस लेने के लिए सक्रिय हो रहे थे।</p>
+
+      <p>तभी, उसकी पीठ के ऊपरी हिस्से के सख्त और पुराने कवच पर अत्यधिक दबाव पड़ा।</p>
+
+      <p class="action-text">"चटक!"</p>
+
+      <p>उसके सिर के पीछे एक सीधी दरार पड़ गई। उस फटी हुई केचुली (Exuvia) के अंदर से धीरे-धीरे एक नया, बिल्कुल अलग और गीला सिर बाहर निकला।</p>
+
+      <ul>
+        <li>सबसे पहले उसकी दो विशाल और चमकदार आँखें बाहर आईं।</li>
+        <li>इसके बाद उसका नया धड़ और छह कोमल टांगें बाहर निकलीं।</li>
+      </ul>
+
+      <p>एरोन अब अपनी ही पुरानी सूखी त्वचा पर उल्टा लटका हुआ था। वह बेहद नाजुक और असहाय स्थिति में था। यदि इस समय कोई शिकारी पक्षी या कीट उसे देख लेता, तो उसका सफर यहीं खत्म हो जाता। लेकिन प्रकृति ने उसे उस तने की ओट में सुरक्षित रखा था।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>पंखों का खिलना और नया रूप</h3>
+
+      <p>लगभग आधे घंटे तक उल्टा लटके रहने और अपने नए अंगों को थोड़ा मजबूत करने के बाद, एरोन ने एक शक्तिशाली झटका दिया।</p>
+
+      <p>उसने अपने शरीर के भीतर के तरल पदार्थ (Hemolymph) को अपनी पीठ पर चिपके मुड़े हुए अंगों में तेजी से पंप करना शुरू किया।</p>
+
+      <p>धीरे-धीरे, चमत्कार होना शुरू हुआ! उसके चारों पंख जो अब तक दो गीले और सिकुड़े हुए कागज के टुकड़ों की तरह थे, वे खुलने लगे। वे फैलने लगे, लंबे होने लगे और काँच की तरह पूरी तरह पारदर्शी हो गए। उन पर नसों का एक बेहद जटिल और मजबूत जाल (Venation) उभर आया।</p>
+
+      <p>साथ ही, उसका लंबा पेट (Abdomen) भी सीधा और पतला होता गया।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>आसमान के सिकंदर का जन्म</h3>
+
+      <!-- Climax Highlight Box -->
+      <div class="climax-highlight">
+        <p>जैसे ही सुबह की पहली तेज धूप उस सरकंडे के तने पर पड़ी, एरोन के नए शरीर पर उसकी रोशनी पड़ी।</p>
+        <p>उसका पुराना मटमैला और भूरा रंग पूरी तरह गायब हो चुका था। उसकी जगह एक अत्यंत चमकीले, धातुई नीले (Metallic Blue) और जीवंत हरे रंग ने ले लिया था। उसकी दो विशाल आँखें, जो हजारों छोटे-छोटे लेंसों से बनी थीं, अब किसी बहुमूल्य हीरे की तरह चमक रही थीं।</p>
+        <p>सूरज की गर्मी से उसके पंख पूरी तरह सूखकर फौलाद जैसे मजबूत हो चुके थे।</p>
+      </div>
+
+      <p>एरोन अब पानी की कीचड़ में रहने वाला वह बदसूरत 'निंफ' नहीं रहा था।</p>
+
+      <p>वह अब <strong>'एरोन'—आसमान का नया और भव्य सम्राट, एक पूर्ण वयस्क ड्रैगनफ्लाई</strong> बन चुका था!</p>
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>अब शुरू होती है हवाओं की जंग...</p>
+      <a href="unit6.html" class="next-btn">Unit 6 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

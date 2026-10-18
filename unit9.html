@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 9: अंतिम उड़ान | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --sunset: #ff7b54; /* Emotional sunset color for the final flight */
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--sunset));
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .story-content em {
+      color: #fff;
+      font-style: italic;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* Special Emotional Highlight for the final flight */
+    .emotional-box {
+      background: linear-gradient(180deg, rgba(255, 123, 84, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+      border: 1px solid rgba(255, 123, 84, 0.3);
+      border-radius: 12px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(255, 123, 84, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emotional-box::before {
+      content: '✦';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--sunset);
+      opacity: 0.5;
+    }
+
+    .emotional-box p {
+      margin-bottom: 1rem !important;
+      color: #fff !important;
+      font-size: 1.3rem !important;
+      line-height: 2 !important;
+      font-style: italic;
+    }
+
+    .emotional-box p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+      .emotional-box {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit8.html" class="back-link">← पिछला अध्याय (Unit 8)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 9</span>
+    <h1 class="main-title">जीवन का संध्याकाल और अंतिम उड़ान</h1>
+
+    <div class="story-content">
+      <p>वंश को आगे बढ़ाने और अपने इलाके की पूरी जिम्मेदारी निभाने के बाद, एरोन के जीवन का एक लंबा और स्वर्णिम अध्याय पूरा हो चुका था। लेकिन प्रकृति के चक्र में हर शुरुआत का एक अंत निश्चित होता है, और अब एरोन के जीवन की शाम ढलने लगी थी।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>बढ़ती उम्र और शरीर की थकान</h3>
+
+      <p>सर्दियों की आहट के साथ ही नील सरोवर के मौसम में एक ठिठुरन घुलने लगी थी। हवाएँ अब पहले से ज्यादा सर्द और भारी हो चुकी थीं।</p>
+
+      <p>एरोन अब एक वृद्ध ड्रैगनफ्लाई बन चुका था:</p>
+
+      <ul>
+        <li>उसके कभी कांच की तरह चमकने वाले और बेदाग पंखों के किनारे अब घिस चुके थे और उन पर कई छोटे-छोटे कट लग गए थे।</li>
+        <li>उसके शरीर का वह चमकीला धातुई नीला और हरा रंग अब फीका पड़कर थोड़ा मटमैला और गहरा हो चुका था।</li>
+        <li>उसकी गति में अब वह बिजली जैसी तेजी नहीं रही थी। अब उसे एक सीधी उड़ान भरने या हवा में कलाबाजी खाने के लिए भी अपनी सारी ताकत झोंकनी पड़ती थी।</li>
+      </ul>
+
+      <p>कभी-कभी शिकार करते वक्त कोई चालाक मक्खी उसकी पकड़ से छूट जाती थी—एक ऐसी बात जो उसके जवानी के दिनों में कभी संभव नहीं थी।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>धूप सेंकना और यादों का संसार</h3>
+
+      <p>ताकत कम होने के कारण एरोन अब ज्यादातर समय हवा में उड़ने के बजाय झील के किनारे उगे एक बड़े, चिकने पत्थर की धूप में बिताता था।</p>
+
+      <p>वह सुबह की सुनहरी धूप में अपने पंखों को पूरी तरह फैलाकर बैठ जाता था। सूरज की गर्माहट उसके बूढ़े शरीर को थोड़ी राहत देती थी। इस विश्राम के दौरान उसकी बड़ी आँखें अक्सर झील के शांत पानी पर टिक जाती थीं।</p>
+
+      <p>पानी के उस पारदर्शी आवरण के नीचे उसे नन्हे-नन्हे 'निंफ' तैरते हुए दिखाई देते थे—वे उसी नई पीढ़ी के जीव थे, जिन्हें उसने और ज़ेफायरा ने जन्म दिया था। उनमें से कुछ उसके अपने बच्चे थे, जो आने वाले वसंत में पानी की सतह को चीरकर आसमान की इस दुनिया में आने वाले थे।</p>
+
+      <p>यह सब देखकर एरोन के भीतर एक गहरी शांति और संतोष भर जाता था। उसने एक परिपूर्ण, साहसी और राजाओं जैसा जीवन जिया था:</p>
+
+      <ul>
+        <li>उसने पानी की अंधेरी गहराइयों से लेकर खुले आसमान की ऊँचाइयों तक का सफर तय किया था।</li>
+        <li>उसने मौत को कई बार मात दी थी, दुश्मनों से अपना साम्राज्य बचाया था, और हवाओं पर राज किया था।</li>
+      </ul>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>अंतिम उड़ान और आसमान की पुकार</h3>
+
+      <p>नवंबर का महीना आ चुका था। ठंडी हवाएँ अब और अधिक तेज हो गई थीं। झील के अधिकांश कीट या तो मर चुके थे या ठंड से बचने के लिए गहरी मिट्टी में छिप चुके थे।</p>
+
+      <p>एक बेहद साफ और ठंडी सुबह, जब सूरज की किरणें पानी पर पड़ीं, एरोन ने महसूस किया कि उसकी आंतरिक ऊर्जा पूरी तरह समाप्त हो रही है। उसकी टांगों में अब उस पत्थर को पकड़े रहने की ताकत नहीं बची थी।</p>
+
+      <p>लेकिन एरोन एक योद्धा था। वह जमीन पर चुपचाप दम तोड़कर हार नहीं मानना चाहता था। वह अपने साम्राज्य के राजा की तरह, <strong>उड़ते हुए</strong> इस दुनिया को अलविदा कहना चाहता था।</p>
+
+      <p>उसने अपनी आखिरी और बची हुई सारी ताकत को इकट्ठा किया। उसके बूढ़े और जर्जर पंखों ने आखिरी बार हवा को चीरना शुरू किया।</p>
+
+      <p class="action-text">"ज़ज़ज़..."</p>
+
+      <p>एरोन पत्थर से उठा। उसने हवा में अपनी उड़ान भरी।</p>
+
+      <!-- Emotional Box for the final flight -->
+      <div class="emotional-box">
+        <p>10 फीट... 20 फीट... 40 फीट!</p>
+        <p>वह नील सरोवर के पानी से काफी ऊपर, नीले आसमान की असीम गहराइयों में पहुँच गया। नीचे उसकी पूरी दुनिया—वह झील, वो सरकंडे, और उसके जीवन का हर कोना—एक छोटी सी तसवीर की तरह फैल हुई थी।</p>
+      </div>
+
+      <p>ठंडी हवा उसके घिसे हुए पंखों से टकरा रही थी। उसने अपनी विशाल आँखों को फैलाकर आखिरी बार इस सुंदर, विशाल और रोमांचक दुनिया को देखा।</p>
+
+      <p>उसकी धड़कनें धीमी पड़ने लगीं। उसके पंखों की फड़फड़ाहट रुक गई।</p>
+
+      <p>एरोन ने अपने पंखों को पूरी तरह फैलाए रखा और एक हल्की पत्ती की तरह धीरे-धीरे हवा में तैरते हुए नीचे झील के शांत पानी की ओर उतरने लगा।</p>
+
+      <p>जब उसका शरीर पानी की सतह से टकराया, तो वहाँ पानी पर एक छोटी सी सुनहरी लहर बन गई। सूरज की एक किरण ठीक उसी जगह पड़ी, और पानी की गोद ने हमेशा के लिए उसे अपनी आगोश में ले लिया।</p>
+
+      <div class="emotional-box">
+        <p>पानी की गहराइयों से शुरू हुआ सफर, आसमान की ऊँचाइयों को छूकर, वापस पानी की शांत गोद में आकर शांत हो गया था।</p>
+      </div>
+
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>एक राजा का अंत... लेकिन क्या यह सच में अंत है?</p>
+      <a href="unit10.html" class="next-btn">Unit 10 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

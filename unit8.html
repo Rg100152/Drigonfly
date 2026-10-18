@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 8: प्यार का चक्र | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .story-content em {
+      color: #fff;
+      font-style: italic;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* Special Highlight for the Mating Wheel */
+    .highlight-box {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.1) 50%, rgba(212, 175, 55, 0.05) 100%);
+      border-left: 3px solid var(--gold);
+      padding: 2rem;
+      border-radius: 0 10px 10px 0;
+      margin: 2.5rem 0;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05);
+    }
+
+    .highlight-box p {
+      margin-bottom: 0 !important;
+      color: #fff !important;
+      font-size: 1.25rem !important;
+      line-height: 2 !important;
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+      .highlight-box {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit7.html" class="back-link">← पिछला अध्याय (Unit 7)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 8</span>
+    <h1 class="main-title">प्यार का चक्र और 'Mating Wheel' का निर्माण</h1>
+
+    <div class="story-content">
+      <p>नील सरोवर के पूर्वी इलाके पर अपनी धाक जमाने और राजा बनने के बाद, एरोन का जीवन अब एक नए और सबसे खूबसूरत पड़ाव पर पहुँच चुका था। उसके पास बेहतरीन शिकार था, एक सुरक्षित और विशाल साम्राज्य था, और हवाओं पर उसका पूरा नियंत्रण था। लेकिन प्रकृति का एक शाश्वत नियम है—<strong>जीवन का पहिया कभी रुकना नहीं चाहिए।</strong></p>
+
+      <p>एरोन के भीतर अब एक गहरी जैविक पुकार जाग उठी थी, जो उसे अपनी प्रजाति के वंश को आगे बढ़ाने के लिए प्रेरित कर रही थी। ड्रैगनफ्लाई का वयस्क जीवन बहुत लंबा नहीं होता; इसलिए यह समय उसके लिए सबसे महत्वपूर्ण था।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>एक सुनहरी शाम और नया आंगतुक</h3>
+
+      <p>शरद ऋतु की एक शांत और सुनहरी शाम थी। झील का पानी किसी साफ दर्पण की तरह चमक रहा था, जिस पर ढलते सूरज की लालिमा तैर रही थी। एरोन अपने पसंदीदा सरकंडे के तने पर बैठकर आराम कर रहा था, तभी हवा में एक अनोखी और कोमल सी सरसराहट गूंजी।</p>
+
+      <p>उसकी 30,000 लेंस वाली विशाल आँखों ने तुरंत उस आंगतुक को भांप लिया।</p>
+
+      <p>वह एक बेहद खूबसूरत, सुनहरे-हरे और भूरे रंग के पैटर्न वाली मादा ड्रैगनफ्लाई थी (जिसे हम <strong>'ज़ेफायरा'</strong> कह सकते हैं)। वह जलीय पौधों के पास बहुत ही सधे हुए और शालीन अंदाज में उड़ रही थी, मानों किसी सुरक्षित और उपजाऊ जगह की तलाश कर रही हो।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>प्रेम का हवाई नृत्य (Aerial Courtship)</h3>
+
+      <p>एरोन का दिल तेजी से धड़कने लगा। उसने तुरंत तने से उड़ान भरी और ज़ेफायरा के सामने आ गया।</p>
+
+      <p>अपनी ताकत और श्रेष्ठता साबित करने के लिए एरोन ने हवा में एक अत्यंत जटिल और आकर्षक <strong>'हवाई नृत्य' (Aerial Courtship)</strong> शुरू किया:</p>
+
+      <ul>
+        <li>वह हवा में एक ही जगह पर तेजी से मंडराया (Hovering)।</li>
+        <li>फिर उसने पलक झपकते ही एक शानदार कलाबाजी (Loop-the-Loop) खाई।</li>
+        <li>वह अपनी पूरी गति और धातुई नीले रंगों की चमक दिखाते हुए ज़ेफायरा के चारों ओर गोल-गोल घूमने लगा।</li>
+      </ul>
+
+      <p>ज़ेफायरा ने तने पर बैठकर एरोन के इस अद्भुत प्रदर्शन को देखा। एरोन का शक्तिशाली शरीर, उसकी पैनी आँखें और उसकी बेजोड़ उड़ान यह साबित कर रही थी कि वह एक बेहतरीन और स्वस्थ योद्धा है, जिसके पास उसकी होने वाली संतान के लिए सबसे मजबूत जीन्स (Genes) हैं।</p>
+
+      <p>ज़ेफायरा ने अपनी सहमति देते हुए उड़ान भरी और एरोन के करीब आ गई।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>प्रकृति का अनूठा चमत्कार: 'Mating Wheel' (दिल का आकार)</h3>
+
+      <p>कीट जगत में ड्रैगनफ्लाई का मिलन (Mating) सबसे अनोखा और कलात्मक माना जाता है। यह किसी जादू से कम नहीं होता।</p>
+
+      <p><strong>1. पहला कदम (The Claspers):</strong> एरोन ने हवा में उड़ते हुए अपने पेट (Abdomen) के पिछले हिस्से में बने विशेष हुकनुमा अंगों (<strong>Claspers</strong>) से ज़ेफायरा की गर्दन के पिछले हिस्से को बहुत ही नरमी से पकड़ लिया।</p>
+
+      <p><strong>2. शारीरिक जुड़ाव (The Wheel):</strong> ज़ेफायरा ने अपनी लचीली पूंछ को आगे की ओर मोड़ा और अपने शरीर के निचले हिस्से को एरोन के शरीर के ऊपरी हिस्से (जहाँ उसके प्रजनन अंग होते हैं) से जोड़ लिया।</p>
+
+      <!-- Highlight Box for Mating Wheel -->
+      <div class="highlight-box">
+        <p>इस अद्भुत और अनोखी प्रक्रिया में दोनों के शरीर मिलकर हवा में <strong>एक परफेक्ट 'दिल' (Heart Shape)</strong> का आकार बना लेते हैं! विज्ञान की भाषा में इसे <strong>'मैटिंग व्हील' (Mating Wheel)</strong> कहा जाता है।</p>
+      </div>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>हवा में तैरता हुआ प्रेम</h3>
+
+      <p>वे दोनों इस 'दिल के आकार' में एक-दूसरे से जुड़े हुए थे, और हवा में एक साथ पंख फड़फड़ाते हुए झील के ऊपर तैर रहे थे।</p>
+
+      <p>दृश्य बेहद जादुई था। ढलते सूरज की सुनहरी किरणें उनके पारदर्शी पंखों से छनकर इस 'दिल' को चमका रही थीं। हवा के हल्के झोंके उन्हें संभाल रहे थे, और वे दोनों प्रकृति के सबसे प्राचीन और पवित्र संगीत में डूबे हुए थे।</p>
+
+      <p>लगभग आधे घंटे तक यह मिलन चक्र चला।</p>
+
+      <p>चक्र पूरा होने के बाद, एरोन ने ज़ेफायरा को आजाद कर दिया, लेकिन उसने उसका साथ नहीं छोड़ा। उसने <strong>'मेट गार्डिंग' (Mate Guarding)</strong> शुरू कर दी—यानी वह ज़ेफायरा के आसपास ही मंडराता रहा, ताकि कोई दूसरा नर ड्रैगनफ्लाई उसके पास न आ सके।</p>
+
+      <p>ज़ेफायरा ने नील सरोवर के किनारे उगे जल-पौधों के तनों के पास जाकर अपने अंडे सुरक्षित रूप से पानी के भीतर देने शुरू कर दिए—ठीक उसी तरह, जैसे कभी एरोन की माँ ने दिए थे।</p>
+
+      <p>एरोन ऊपर आसमान में पहरा दे रहा था। जब आखिरी अंडा भी सुरक्षित पानी में चला गया, तो एरोन को एक असीम और गहरी तृप्ति का अनुभव हुआ। उसने अपने जीवन का सबसे बड़ा कर्तव्य पूरा कर लिया था।</p>
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>जीवन के इस चक्र के बाद, अब आती है अंतिम उड़ान...</p>
+      <a href="unit9.html" class="next-btn">Unit 9 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

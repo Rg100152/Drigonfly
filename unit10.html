@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 10: अनंत चक्र (Finale) | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.3);
+      --sunrise: #ffb347; /* New dawn color */
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--sunrise));
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 179, 71, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* Special Grand Finale Box (For new dawn) */
+    .finale-box {
+      background: linear-gradient(180deg, rgba(255, 179, 71, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+      border: 1px solid rgba(255, 179, 71, 0.3);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      margin: 3rem 0;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(255, 179, 71, 0.1);
+      position: relative;
+    }
+
+    .finale-box p {
+      margin-bottom: 1rem !important;
+      color: #fff !important;
+      font-size: 1.3rem !important;
+      line-height: 2 !important;
+      font-style: italic;
+    }
+
+    .finale-box p:last-child {
+      margin-bottom: 0 !important;
+      color: var(--sunrise) !important;
+      font-weight: 600;
+    }
+
+    /* ========== FOOTER / END OF STORY ========== */
+    .end-of-story {
+      margin-top: 6rem;
+      padding-top: 4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .end-of-story h2 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .end-of-story p {
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      font-family: var(--font-story);
+    }
+
+    .home-btn {
+      display: inline-block;
+      padding: 1rem 3rem;
+      background: transparent;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    .home-btn:hover {
+      background: var(--gold);
+      color: #000;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+      transform: translateY(-3px);
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+      .finale-box {
+        padding: 2rem 1.5rem;
+      }
+      .end-of-story h2 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit9.html" class="back-link">← पिछला अध्याय (Unit 9)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 10 - Finale</span>
+    <h1 class="main-title">नया सवेरा और अनंत चक्र</h1>
+
+    <div class="story-content">
+      <p>एरोन अब इस भौतिक दुनिया में नहीं था। उसका भौतिक शरीर नील सरोवर के शांत पानी में धीरे-धीरे नीचे बैठ गया, जहाँ वह झील की तलहटी के पौधों और मिट्टी के लिए पोषण बन गया। एक महान योद्धा का जीवन समाप्त हो चुका था, लेकिन प्रकृति के महान नाटक में कहानी का अंत यहीं नहीं होता।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>पानी की गहराई में हलचल</h3>
+
+      <p>ठीक उसी समय, उसी झील के एक शांत कोने में, जलकुंभी के एक पुराने तने के नीचे लिपटे हुए अंडों में एक जादुई हलचल शुरू हुई।</p>
+
+      <p>उनमें से एक विशेष अंडे की पारदर्शी झिल्ली पर अंदर से दबाव पड़ने लगा।</p>
+
+      <p class="action-text">"चटक!"</p>
+
+      <p>अंडे की दीवार फटी और ठंडी पानी की धारा के साथ एक बेहद नन्हा, पारदर्शी और छह टांगों वाला जीव बाहर आया। वह एक नन्हा 'निंफ' था—एरोन का अपना खून, उसकी अगली पीढ़ी का एक नया वारिस।</p>
+
+      <p>उस नन्हे जीव ने अपनी आँखें खोलीं। उसे इस विशाल, अंधेरे और रहस्यमयी पानी के पाताल लोक के बारे में कुछ भी नहीं पता था। उसे नहीं पता था कि ऊपर एक चमकीली दुनिया है, न ही उसे यह पता था कि उसे किन-किन खतरनाक शिकारियों से बचना है।</p>
+
+      <p>लेकिन उसके भीतर प्रकृति का एक प्राचीन कोड सक्रिय था—<strong>जीवित रहने की जिद और आगे बढ़ने की भूख।</strong></p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>चक्र की निरंतरता</h3>
+
+      <p>उस नन्हे निंफ ने अपनी छह टांगों को कीचड़ पर रखा और पानी के भीतर अपना पहला कदम बढ़ाया।</p>
+
+      <ul>
+        <li>वह बड़ा होगा।</li>
+        <li>वह पानी के नीचे के खतरों से लड़ेगा।</li>
+        <li>वह कई बार अपनी त्वचा (मोल्टिंग) बदलेगा।</li>
+        <li>और फिर एक दिन, जब समय आएगा, वह सरकंडे के तने पर रेंगते हुए पानी से बाहर निकलेगा।</li>
+        <li>वह अपनी केचुली को तोड़ेगा, अपने काँच जैसे पंखों को फैलाएगा, और पहली बार धूप में चमकते हुए नीले आसमान की ओर उड़ान भरेगा।</li>
+      </ul>
+
+      <p>एरोन का शरीर भले ही मिट्टी में मिल गया हो, लेकिन उसकी उड़ान, उसकी बहादुरी और उसकी आज़ादी की गूंज आज भी नील सरोवर की हवाओं और लहरों में जीवित थी।</p>
+
+      <!-- Grand Finale Highlight Box -->
+      <div class="finale-box">
+        <p>जीवन का यह चक्र—अंडे से निंफ, निंफ से महान रूपांतरण, और फिर आसमान से वापस पानी की गोद में लौटने का यह सफर—</p>
+        <p>अनंत काल से चला आ रहा है और इसी तरह हमेशा चलता रहेगा।</p>
+      </div>
+
+    </div>
+
+    <!-- End of Story Section -->
+    <div class="end-of-story">
+      <h2>The End... or a New Beginning?</h2>
+      <p>एक राजा की कहानी समाप्त हुई, लेकिन उसकी विरासत हमेशा जीवित रहेगी।</p>
+      <a href="index.html" class="home-btn">← वापस मुख्य पृष्ठ पर जाएँ</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

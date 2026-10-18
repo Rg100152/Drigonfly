@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 4: पानी का दानव | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit3.html" class="back-link">← पिछला अध्याय (Unit 3)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 4</span>
+    <h1 class="main-title">झील के निचले संसार का खूंखार शिकारी और पानी का दानव</h1>
+
+    <div class="story-content">
+      <p>अपनी पहली सफल मोल्टिंग (त्वचा बदलने) के बाद, एरोन अब पहले से कहीं अधिक बड़ा, शक्तिशाली और चालाक हो चुका था। उसका शरीर अब लगभग एक से डेढ़ इंच लंबा हो चुका था और उसकी पीठ पर मौजूद पंखों के छोटे उभार (Wing Pads) अब स्पष्ट रूप से दिखाई देने लगे थे।</p>
+
+      <p>नील सरोवर की तलहटी में अब एरोन का खौफ फैलने लगा था। वह छोटे-मोटे जीवों का शिकार करने से आगे बढ़कर अब बड़े और चुनौतीपूर्ण शिकारों की तलाश में रहता था।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>बड़े शिकार की तलाश और टेडपोल का सामना</h3>
+
+      <p>वसंत का मौसम अपने चरम पर था। झील के उथले किनारों पर मेंढकों ने अंडे दिए थे, जिनसे हजारों छोटे-छोटे <strong>'टेडपोल' (Tadpoles - मेंढक के बच्चे)</strong> बाहर निकल आए थे। ये टेडपोल पानी में इधर-उधर तेजी से तैरते हुए तैरने का अभ्यास कर रहे थे।</p>
+
+      <p>एरोन के लिए यह किसी दावत से कम नहीं था।</p>
+
+      <p>वह एक घने जलीय पौधे (Hydrilla) के पीछे छिपकर बैठ गया। उसकी बड़ी-बड़ी गोल आँखें पानी की हर हरकत पर नजर रखे हुए थीं।</p>
+
+      <p>तभी, एक सुस्त और गोलमटोल टेडपोल तैरते हुए एरोन के ठीक सामने आ गया। वह अपनी लंबी पूंछ को हिलाते हुए आगे बढ़ रहा था, उसे इस बात का जरा भी अंदाजा नहीं था कि मौत इतनी करीब है।</p>
+
+      <p>एरोन ने अपने शरीर को थोड़ा सा सिकोड़ा, अपनी छह टांगों से कीचड़ को मजबूती से पकड़ा, और अपने उस घातक 'मास्क' (जबड़े) को ऊर्जा से भर लिया।</p>
+
+      <p class="action-text">"झपट्ट!"</p>
+
+      <p>एक सेकंड के दसवें हिस्से से भी कम समय में एरोन का मास्क बिजली की तेजी से बाहर निकला। उसने टेडपोल को उसके शरीर के बीचों-बीच कसकर दबोच लिया। टेडपोल ने बचने के लिए छटपटाई, पानी में बुलबुले छोड़े, लेकिन एरोन के नुकीले कांटेदार जबड़े की पकड़ लोहे के शिकंजे जैसी मजबूत थी।</p>
+
+      <p>एरोन ने उसे खींचकर अपने मुँह के पास किया और अपना भोजन पूरा किया। इस बड़े शिकार से उसे जबरदस्त ऊर्जा मिली, जिससे उसका शरीर और तेजी से विकसित होने लगा।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>पानी का असली दानव: 'डाइविंग बीटल' से आमना-सामना</h3>
+
+      <p>लेकिन नील सरोवर में केवल एरोन ही शिकारी नहीं था। उस पानी के नीचे एक और ऐसा जीव रहता था जिसे पानी का 'दानव' कहा जाता था—<strong>'ग्रेट डाइविंग बीटल' (Great Diving Beetle)</strong> और उसका लार्वा।</p>
+
+      <p>यह बीटल काले रंग का एक भारी-भरकम और बेहद आक्रामक शिकारी था, जो पानी के कीचड़ में किसी टैंक की तरह घूमता था। उसके पास मजबूत जबड़े थे और वह एरोन से आकार में लगभग दोगुना बड़ा था।</p>
+
+      <p>एक दोपहर, जब एरोन एक बड़े पत्थर के पास आराम कर रहा था, पानी में एक भारी हलचल हुई।</p>
+
+      <p>एरोन की पैनी निगाहों ने तुरंत उस विशाल काले साये को भांप लिया। वह एक वयस्क डाइविंग बीटल था, जो उसी पत्थर के नीचे अपने छिपने की जगह तलाश रहा था।</p>
+
+      <p>बीटल की नजरें एरोन पर पड़ गईं। उसके लिए एरोन एक आसान और स्वादिष्ट निवाला था।</p>
+
+      <p>बीटल ने अपनी मजबूत टांगों को चलाया और एक झटके में एरोन की तरफ झपट्टा मारा।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>बुद्धिमत्ता और फुर्ती से मात</h3>
+
+      <p>अगर एरोन उस समय सीधा मुकाबला करता, तो वह मारा जाता। उसका नया शरीर मजबूत जरूर हुआ था, लेकिन उस विशाल बीटल के सामने उसकी ताकत कम थी।</p>
+
+      <p>लेकिन एरोन अब सिर्फ एक नासमझ कीड़ा नहीं रहा था; उसने नील सरोवर की हर चाल सीख ली थी।</p>
+
+      <p>ठीक उस समय जब बीटल का जबड़ा एरोन को दबोचने ही वाला था, एरोन ने अपनी <strong>'जेट प्रोपल्शन' (Jet Propulsion)</strong> तकनीक का इस्तेमाल किया। उसने अपने पिछले हिस्से से पानी को अत्यधिक दबाव के साथ पीछे की ओर फेंका।</p>
+
+      <p class="action-text">"शूँऽऽ!"</p>
+
+      <p>एरोन गोली की रफ्तार से पीछे की तरफ उछला और सीधे कीचड़ के एक गहरे बादलों के बीच जा घुसा। उसने पानी में मचलते हुए कीचड़ को अपने पिछले अंगों से उड़ा दिया, जिससे पानी में एक धुंधलापन (Mud Cloud) फैल गया।</p>
+
+      <p>डाइविंग बीटल उस धुंध में भ्रमित हो गया। वह खाली पानी में अपने जबड़े चलाता रह गया, और जब तक पानी का मैल साफ हुआ, एरोन वहाँ से कोसों दूर एक घने पौधे के नीचे सुरक्षित रूप से छिप चुका था।</p>
+
+      <p>बीटल झुंझलाकर दूसरी दिशा में निकल गया।</p>
+
+      <p>एरोन ने एक बार फिर अपनी जान बचा ली थी। इस घटना ने उसे और अधिक सतर्क बना दिया। वह समझ चुका था कि इस दुनिया में जीवित रहने के लिए केवल ताकत नहीं, बल्कि समय पर सही फैसला लेने की भी जरूरत होती है।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <p>समय बीतता गया। एरोन ने पानी के भीतर कई बार अपनी त्वचा (मोल्टिंग) बदली। उसका शरीर अब पूरी तरह से एक वयस्क निंफ के रूप में तैयार हो चुका था। उसकी पीठ के पंखों के उभार अब बड़े और मजबूत हो चुके थे।</p>
+
+      <p>उसके भीतर अब एक अजीब सी बेचैनी शुरू हो गई थी—पानी की यह दुनिया अब उसे तंग लगने लगी थी। उसकी आत्मा किसी ऊंचे और सुनहरे आसमान की पुकार सुन रही थी।</p>
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>अब पानी की दुनिया एरोन को तंग लगने लगी है...</p>
+      <a href="unit5.html" class="next-btn">Unit 5 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

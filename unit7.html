@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 7: इलाके की जंग | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .story-content em {
+      color: #fff;
+      font-style: italic;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Action Dialogue styling */
+    .action-text {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* Special Highlight for the battle */
+    .highlight-box {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.1) 50%, rgba(212, 175, 55, 0.05) 100%);
+      border-left: 3px solid var(--gold);
+      padding: 2rem;
+      border-radius: 0 10px 10px 0;
+      margin: 2.5rem 0;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05);
+    }
+
+    .highlight-box p {
+      margin-bottom: 0 !important;
+      color: #fff !important;
+      font-size: 1.25rem !important;
+      line-height: 2 !important;
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left;
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none;
+      }
+      .highlight-box {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="unit6.html" class="back-link">← पिछला अध्याय (Unit 6)</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 7</span>
+    <h1 class="main-title">इलाके की जंग और आसमान का संघर्ष</h1>
+
+    <div class="story-content">
+      <p>आसमान पर अपनी निर्बाध उड़ान और हवा में अचूक शिकार का हुनर हासिल करने के बाद, एरोन अब पूरी तरह से नील सरोवर के वायुमंडलीय क्षेत्र का एक वयस्क और प्रतापी ड्रैगनफ्लाई बन चुका था। लेकिन कुदरत के नियम के अनुसार, हवा के इस विशाल साम्राज्य में सिर्फ उड़ना ही काफी नहीं था; अपनी संप्रभुता और अस्तित्व बनाए रखने के लिए एक समृद्ध क्षेत्र (Territory) का होना बेहद जरूरी था।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>नील सरोवर का सबसे कीमती इलाका</h3>
+
+      <p>नील सरोवर का पूर्वी हिस्सा बेहद खास था। यहाँ जलीय पौधों, फूलों और सरकंडों की भरमार थी। इस वजह से यहाँ भारी संख्या में छोटे-छोटे कीट, मक्खियाँ और मच्छर पनपते थे, जो भोजन का एक बड़ा स्रोत थे। इसके अलावा, यहाँ की शांत और स्वच्छ जलधारा मादा ड्रैगनफ्लाई के अंडे देने के लिए सबसे सुरक्षित स्थान मानी जाती थी।</p>
+
+      <p>एरोन ने इसी सबसे समृद्ध इलाके को चुना और वहाँ अपना वर्चस्व स्थापित कर लिया।</p>
+
+      <p>वह दिन भर अपने इलाके के चक्कर लगाता। कभी वह हवा में एक ही जगह पर मंडराता (Hovering) तो कभी किसी सूखे तने की सबसे ऊंची नोक पर बैठकर अपनी 30,000 लेंस वाली विशाल आँखों से पूरे क्षेत्र का निरीक्षण करता। जो भी घुसपैठिया या शिकारी उसके दायरे में कदम रखता, एरोन तुरंत उसका मुकाबला करने के लिए तैयार हो जाता।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>लाल दानव का आक्रमण: 'रेड डार्टर' से चुनौती</h3>
+
+      <p>एक दोपहर, जब सूरज की तेज किरणें नील सरोवर के पानी पर सीधे चमक रही थीं, हवा में एक भारी और आक्रामक सरसराहट की आवाज गूंजी।</p>
+
+      <p>एक विशाल, भयंकर और गहरे लाल रंग का नर ड्रैगनफ्लाई—जिसे <strong>'रेड डार्टर' (Red Darter)</strong> कहा जाता था—एरोन की सीमा में बिना इजाजत घुस आया। वह आकार में एरोन जितना ही बड़ा था और कई लड़ाइयों के निशानों से भरा एक अनुभवी योद्धा लग रहा था।</p>
+
+      <p>रेड डार्टर सीधे एरोन के पसंदीदा विश्राम-स्थल—सरकंडे की उस सबसे ऊंची नोक—की तरफ बढ़ा और उस पर जा बैठा।</p>
+
+      <p>यह एरोन की सत्ता और आत्मसम्मान पर सीधा हमला था!</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>हवा में भयंकर महायुद्ध (Dogfight)</h3>
+
+      <p>एरोन ने एक सेकंड की भी देरी नहीं की। उसने अपने चारों पंखों को पूरी ताकत से फड़फड़ाया और एक जेट फाइटर प्लेन की तरह सीधे रेड डार्टर की तरफ झपट्टा मारा।</p>
+
+      <p class="action-text">"शूँऽऽ!"</p>
+
+      <p>रेड डार्टर ने खतरे को भांपते हुए तने से छलांग लगाई। दोनों विशाल ड्रैगनफ्लाई हवा में एक-दूसरे के आमने-सामने आ गए। वे एक-दूसरे से मात्र कुछ इंच की दूरी पर हवा में मंडरा रहे थे।</p>
+
+      <ul>
+        <li><strong>आकार का प्रदर्शन (Intimidation):</strong> रेड डार्टर ने हवा में अपने शरीर को थोड़ा ऊपर उठाया और अपने पंखों को तेजी से फड़फड़ाकर एरोन को डराने की कोशिश की।</li>
+        <li><strong>ऊँचाई से हमला (Dive Bombing):</strong> एरोन झुका नहीं। वह तेजी से हवा में ऊपर की ओर उड़ा और ऊपर से सीधे रेड डार्टर पर डाइव लगा दी।</li>
+        <li><strong>पंखों की टक्कर:</strong> दोनों के पारदर्शी और मजबूत पंख हवा में आपस में टकराए।</li>
+      </ul>
+
+      <p class="action-text">"छन-छन!"</p>
+
+      <p>कांच टकराने जैसी तीखी आवाज हुई। दोनों योद्धा हवा में एक-दूसरे को काट खाने और नीचे धकेलने की कोशिश कर रहे थे। वे गोल-गोल घूमते हुए हवा में कलाबाजियाँ (Barrel Rolls) खा रहे थे। रेड डार्टर ने एरोन की पूंछ को अपने शक्तिशाली जबड़ों से जकड़ने की कोशिश की, लेकिन एरोन ने तुरंत 'रिवर्स गियर' लिया और पीछे हटकर रेड डार्टर की पीठ पर अपनी टांगों से हमला कर दिया।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>अंतिम वार और वर्चस्व की जीत</h3>
+
+      <p>एरोन की फुर्ती, रफ्तार और रणनीतिक समझ के आगे रेड डार्टर धीरे-धीरे थकने लगा। एरोन ने हवा में तेजी से मुड़कर रेड डार्टर के एक पंख के जोड़ पर अपनी टांगों से जोर का धक्का दिया।</p>
+
+      <p>सुलगते हुए रेड डार्टर का संतुलन बिगड़ गया। उसके दाहिने पंख का किनारा थोड़ा छिल गया था। अपनी पराजय को स्वीकार करते हुए, रेड डार्टर ने अपनी दिशा बदली और झील के दूसरे अनजाने छोर की तरफ बदहवास होकर भाग खड़ा हुआ।</p>
+
+      <p>एरोन ने कुछ मीटर तक उसका पीछा किया, ताकि यह संदेश साफ हो जाए कि इस क्षेत्र में उसकी वापसी नामुमकिन है।</p>
+
+      <!-- Highlight Box -->
+      <div class="highlight-box">
+        <p>जब दुश्मन उसकी आँखों से ओझल हो गया, तो एरोन वापस उड़ा और गर्व से अपने उसी सरकंडे के तने की नोक पर आ बैठा। उसने अपने चारों धातुई नीले पंखों को धूप में फैला दिया।</p>
+        <p>उसने अपनी वीरता से न केवल अपने साम्राज्य की रक्षा की थी, बल्कि अब वह नील सरोवर के इस सबसे समृद्ध हिस्से का निर्विवाद राजा बन चुका था।</p>
+      </div>
+
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>राजपाठ मिल गया, अब बारी है जीवन के चक्र की...</p>
+      <a href="unit8.html" class="next-btn">Unit 8 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>

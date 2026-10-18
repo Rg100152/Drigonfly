@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 1: एक अनसुलझा रहस्य | Dragonfly Vlog</title>
+  
+  <!-- Google Fonts for Story Reading -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-darker: #050508;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+      --text-main: #e2e2e8;
+      --text-dim: #a1a1aa;
+      --font-heading: 'Cinzel', serif;
+      --font-story: 'Tiro Devanagari Hindi', serif;
+      --font-ui: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      font-family: var(--font-story);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* ========== READING PROGRESS BAR ========== */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0%;
+      box-shadow: 0 0 10px var(--gold);
+      transition: width 0.1s;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-bar {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 999;
+      font-family: var(--font-ui);
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .chapter-title-nav {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* ========== STORY CONTAINER ========== */
+    .story-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background Ambient Glow */
+    .story-container::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.05);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Story Typography */
+    .story-content p {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .story-content strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Subheadings inside story */
+    .story-content h3 {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin: 3.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .story-content h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* Divider */
+    .story-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .story-divider::before,
+    .story-divider::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Bullet points styling */
+    .story-content ul {
+      list-style: none;
+      margin: 2rem 0 2rem 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .story-content ul li {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .story-content ul li strong {
+      color: var(--text-main);
+    }
+
+    /* ========== FOOTER / NEXT CHAPTER ========== */
+    .next-chapter-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-family: var(--font-ui);
+    }
+
+    .next-chapter-section p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-family: var(--font-story);
+    }
+
+    .next-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px -5px var(--gold-glow);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -5px var(--gold-glow);
+      background: #fff;
+    }
+
+    /* Author Footer */
+    .author-footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #666;
+      font-family: var(--font-ui);
+    }
+
+    .author-footer span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .story-container {
+        padding: 7rem 1.5rem 3rem;
+      }
+      .story-content p {
+        font-size: 1.1rem;
+        text-align: left; /* Mobile pe justify text acha nahi lagta */
+      }
+      .story-content h3 {
+        font-size: 1.3rem;
+      }
+      .chapter-title-nav {
+        display: none; /* Mobile pe space bachane ke liye */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="nav-bar">
+    <a href="index.html" class="back-link">← वापस होम पर</a>
+    <span class="chapter-title-nav">ड्रैगनफ्लाई: हवाओं का सिकंदर</span>
+  </nav>
+
+  <!-- Story Content -->
+  <main class="story-container">
+    
+    <span class="unit-badge">Unit 1</span>
+    <h1 class="main-title">एक अनसुलझा रहस्य और अंडे की दुनिया</h1>
+
+    <div class="story-content">
+      <p>मानसून की भारी बारिश थम चुकी थी। चारों ओर फैली हरियाली और पत्तियों से टपकती पानी की बूंदें सूरज की पहली किरण में मोतियों की तरह चमक रही थीं। जंगल के बीचों-बीच स्थित <strong>'नील सरोवर'</strong> नाम की एक विशाल और शांत झील थी। यह झील बाहर से जितनी शांत दिखती थी, इसके भीतर और आसपास की दुनिया उतनी ही रहस्यमयी और रोमांचक थी।</p>
+
+      <p>इसी झील के किनारे, जलकुंभी और लंबे सरकंडों के झुरमुट के बीच, हवा में एक अद्भुत चमक उभरी। यह कोई साधारण कीट नहीं था, बल्कि नीले और धात्विक हरे रंग की एक विशाल मादा ड्रैगनफ्लाई थी। उसके पारदर्शी पंख हवा में इतनी तेजी से फड़फड़ा रहे थे कि उनसे एक हल्की और मधुर संगीत जैसी गूंज उत्पन्न हो रही थी।</p>
+
+      <p>मादा ड्रैगनफ्लाई का समय पूरा हो चुका था। वह अपने जीवन के सबसे महत्वपूर्ण कार्य—अपनी अगली पीढ़ी को जन्म देने के लिए एक सुरक्षित स्थान की तलाश कर रही थी।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>नील सरोवर का गहरा राज</h3>
+
+      <p>नील सरोवर केवल जीवों का घर नहीं था; यहाँ प्रकृति का एक सख्त नियम लागू होता था—<strong>"जो चतुर और शक्तिशाली है, वही जीवित रहेगा।"</strong></p>
+
+      <p>मादा ड्रैगनफ्लाई हवा में एक ही जगह पर टिककर स्थिर (Hover) हो गई। उसकी दो विशाल आँखें, जो हजारों छोटे-छोटे लेंसों से बनी थीं, झील की सतह का सूक्ष्मता से निरीक्षण कर रही थीं। पानी के नीचे कई शिकारी मछलियाँ और जहरीले जल-कीट मंडरा रहे थे, जो किसी भी नए जीवन को पनपने से पहले ही निगल जाने को तैयार थे।</p>
+
+      <p>काफी मशक्कत के बाद, उसने पानी के भीतर कुछ इंच डूबे हुए एक पुराने, मजबूत सरकंडे के तने को चुना।</p>
+
+      <p>वह धीरे-धीरे पानी की सतह के पास आई। अपनी पूंछ (अब्डोमेन) को पानी में डुबोकर, उसने अत्यंत सावधानी से उस पौधे के तने में बारीक चीरे बनाए और एक-एक करके चिपचिपे, पारदर्शी आवरण से ढके सैकड़ों छोटे-छोटे अंडे जमा करने शुरू कर दिए।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>अंडे के भीतर का संसार</h3>
+
+      <p>इन्हीं सैकड़ों अंडों में से एक बेहद खास अंडा था। इस अंडे के भीतर एक नया जीव आकार ले रहा था—<strong>'एरोन' (Aron)</strong>।</p>
+
+      <p>अंडे की दुनिया बहुत छोटी थी, लेकिन एरोन के लिए वही उसका पूरा ब्रह्मांड थी।</p>
+
+      <ul>
+        <li><strong>पहला सप्ताह:</strong> अंडे के भीतर पारदर्शी द्रव में एक सूक्ष्म बिंदु जैसा ढांचा बनने लगा।</li>
+        <li><strong>दूसरा सप्ताह:</strong> धीरे-धीरे उसकी छह नन्हीं टांगें, एक विचित्र सिर और एक लंबी पूंछ जैसी आकृति उभरने लगी।</li>
+        <li><strong>तीसरा सप्ताह:</strong> एरोन के हृदय की धड़कन शुरू हो चुकी थी। वह अंडे की पतली झिल्ली के आर-पार बाहर के धुंधले पानी को देख सकता था।</li>
+      </ul>
+
+      <p>पानी का तापमान कभी गिरता तो कभी बढ़ता। कभी-कभी कोई बड़ी मछली उस पौधे के बहुत करीब से गुजरती, जिससे पूरा तना हिल जाता और अंडे के भीतर बैठा एरोन सहम जाता। लेकिन प्रकृति का सुरक्षा कवच मजबूत था।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>बाहर आने की छटपटाहट</h3>
+
+      <p>लगभग 21 दिनों के लंबे इंतजार के बाद, अंडे का पोषण समाप्त होने लगा था। एरोन को अब अपनी छोटी सी दुनिया तंग और घुटन भरी महसूस होने लगी थी। उसके भीतर बाहर निकलने की एक तीव्र इच्छा जागृत हुई।</p>
+
+      <p>उसने अपने नन्हे शरीर को मोड़ना और फैलाना शुरू किया। उसके सिर के सामने वाले हिस्से से अंडे की ऊपरी दीवार पर दबाव बनने लगा।</p>
+
+      <p>"चटक!"</p>
+
+      <p>अंडे की पारदर्शी झिल्ली में एक बारीक दरार पड़ी। बाहर का ठंडा, गंदला और ऑक्सीजन से भरा पानी झटके से अंदर दाखिल हुआ। एरोन ने अपने जीवन की पहली सांस ली—पानी के जरिए सांस लेने की एक अद्भुत शुरुआत।</p>
+
+      <p>एरोन ने अपनी पूरी ताकत लगाकर अंडे की दरार को बड़ा किया और खुद को बाहर खींच लिया।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <h3>कीचड़ के पाताल में पहला कदम</h3>
+
+      <p>अंडे से बाहर आते ही एरोन नील सरोवर की अंधेरी और विशाल तलहटी में जा गिरा।</p>
+
+      <p>वह अभी केवल कुछ मिलीमीटर का एक बहुत छोटा जीव था। उसके पास न तो पंख थे, न ही वह खूबसूरत दिखता था। वह भूरे-मटमैले रंग का एक अजीब सा प्राणी था, जिसे विज्ञान की दुनिया में <strong>'निंफ' (Nymph)</strong> कहते हैं।</p>
+
+      <p>चारों ओर विशालकाय पौधे किसी घने जंगल की तरह लग रहे थे। कीचड़ के छोटे-छोटे कण हवा की तरह तैर रहे थे, और पानी की गूंज हर तरफ सुनाई दे रही थी। एरोन को तुरंत इस बात का अहसास हो गया कि वह एक ऐसी दुनिया में आ चुका है जहाँ हर पल मौत का खतरा है।</p>
+
+      <p>लेकिन इसी के साथ उसके भीतर एक नई, अदम्य भूख जागी।</p>
+
+      <p>एरोन ने कीचड़ पर अपना पहला कदम रखा। उसके जीवन का <strong>'अध्याय 1 (Unit 1)'</strong> पूरा हो चुका था—अंडे के सुरक्षित संसार से निकलकर उसने जल-लोक की अनसुलझी, खतरनाक और रोमांचक दुनिया में अपना पहला कदम रख दिया था।</p>
+
+      <div class="story-divider">✦ ✦ ✦</div>
+
+      <p><em>यह कथा की शुरुआत (Unit 1) है। आगे की यात्रा <strong>Unit 2 से Unit 12</strong> के क्रमिक अध्यायों में एरोन के संघर्ष, शिकार, रूप-परिवर्तन, हवाओं पर राज और उसके जीवन के अंतिम सत्य तक जारी रहेगी।</em></p>
+    </div>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-section">
+      <p>कहानी अभी बाकी है...</p>
+      <a href="unit2.html" class="next-btn">Unit 2 पढ़ें →</a>
+    </div>
+
+    <!-- Author Credit -->
+    <div class="author-footer">
+      Created & Developed by <span>Raj Gautam</span>
+    </div>
+
+  </main>
+
+  <!-- Javascript for Reading Progress Bar -->
+  <script>
+    window.onscroll = function() { updateProgressBar() };
+
+    function updateProgressBar() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+  </script>
+</body>
+</html>
